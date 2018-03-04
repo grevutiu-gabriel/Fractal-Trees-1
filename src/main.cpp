@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <SelbaWard/Line.hpp>
+#include <vector>
 
 std::ostream& operator<<(std::ostream& os_, const sf::Vector2f& vec_)
 {
@@ -20,11 +21,6 @@ float map(float value_, FloatPair original_range_, FloatPair new_range_)
 		* (new_range_.second - new_range_.first) + new_range_.first;
 }
 
-float length(sf::Vector2f vec_)
-{
-	return std::sqrt(std::pow(vec_.x, 2) + std::pow(vec_.y, 2));
-}
-
 struct Branch : public sf::Drawable
 {
 	Branch(const Branch* parent_, float angle_)
@@ -37,7 +33,7 @@ struct Branch : public sf::Drawable
 				.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
 			, map(order, {0, 8}, {10, 1})
 			, sf::Color::Black}
-		, angle{angle_}
+		, angle{angle_ + parent_->angle}
 	{
 		line.setRounded(true);
 	};
@@ -45,7 +41,6 @@ struct Branch : public sf::Drawable
 	Branch()
 		: parent{nullptr}
 		, order{0}
-		// , length{map(order, {0, 8}, {100, 10})}
 		, line{{500, 500}, {500, 450}, map(order, {0, 8}, {10, 1}), sf::Color::Black}
 		, angle{0}
 	{
@@ -68,9 +63,21 @@ int main()
 {
 	sf::RenderWindow window({900, 900}, "SFML");
 
-	Branch branch;
-	Branch branch2{&branch, 20};
-	Branch branch3{&branch2, 20};
+	std::vector<Branch> tree;
+	tree.reserve(8);
+	tree.emplace_back();
+
+	for (int i; i < 256; ++i)
+	// {
+		// for (auto& branch : tree)
+		{
+			// if (!branch.branched)
+			{
+				tree.emplace_back(&tree[i], 20);
+				tree.emplace_back(&tree[i], -20);
+			}
+		}
+	// }
 
 	// std::cout << branch2.start;
 
@@ -84,9 +91,8 @@ int main()
 		}
 
 		window.clear(sf::Color::White);
-		window.draw(branch);
-		window.draw(branch2);
-		window.draw(branch3);
+		for (const auto& branch : tree)
+			window.draw(branch);
 		window.display();
 	}
 }
