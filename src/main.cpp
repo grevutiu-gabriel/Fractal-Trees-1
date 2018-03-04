@@ -61,7 +61,7 @@ struct Branch : public sf::Drawable
 
 int main()
 {
-	sf::RenderWindow window({900, 900}, "SFML");
+	sf::RenderWindow window({900, 900}, "SFML", sf::Style::Default, sf::ContextSettings{0, 0, 4});
 
 	std::vector<Branch> tree;
 	tree.reserve(8);
