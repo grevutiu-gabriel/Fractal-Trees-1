@@ -67,7 +67,7 @@ int main()
 	tree.reserve(8);
 	tree.emplace_back();
 
-	for (int i; i < 256; ++i)
+	for (int i; i < 254; ++i)
 		for (int angle : {20, -20})
 			tree.emplace_back(&tree[i], angle);
 
