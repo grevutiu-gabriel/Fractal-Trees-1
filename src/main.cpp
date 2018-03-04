@@ -68,18 +68,8 @@ int main()
 	tree.emplace_back();
 
 	for (int i; i < 256; ++i)
-	// {
-		// for (auto& branch : tree)
-		{
-			// if (!branch.branched)
-			{
-				tree.emplace_back(&tree[i], 20);
-				tree.emplace_back(&tree[i], -20);
-			}
-		}
-	// }
-
-	// std::cout << branch2.start;
+		for (int angle : {20, -20})
+			tree.emplace_back(&tree[i], angle);
 
 	while (true)
 	{
