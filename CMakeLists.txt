@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 find_package(SFML 2 COMPONENTS system window graphics REQUIRED)
 
 include_directories(include extlibs ${SFML_INCLUDE_DIR})
-aux_source_directory(src sources)
+file(GLOB_RECURSE sources src/*)
 add_executable(main ${sources})
 
 set_target_properties(main PROPERTIES CXX_STANDARD 17)
