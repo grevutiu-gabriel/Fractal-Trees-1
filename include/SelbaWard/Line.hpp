@@ -33,7 +33,7 @@
 #ifndef SELBAWARD_LINE_HPP
 #define SELBAWARD_LINE_HPP
 
-#include "Common.hpp"
+#include "SelbaWard/Common.hpp"
 
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Texture.hpp>

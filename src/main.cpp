@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SelbaWard/Line.hpp>
 #include <vector>
+#include <random>
 
 std::ostream& operator<<(std::ostream& os_, const sf::Vector2f& vec_)
 {
@@ -36,7 +37,7 @@ struct Branch : public sf::Drawable
 		, angle{angle_ + parent_->angle}
 	{
 		line.setRounded(true);
-		line.setColor(order < 8 ? sf::Color{66, 35, 24} : sf::Color{186, 40, 67, 100});
+		line.setColor(sf::Color{66, 35, 24});
 	};
 
 	Branch()
@@ -45,13 +46,23 @@ struct Branch : public sf::Drawable
 		, line{{500, 500}, {500, 450}, map(order, {0, 8}, {10, 1}), sf::Color::Black}
 		, angle{0}
 	{
-		line.setRounded(true);
+		line.setRounded(false);
 		line.setColor({66, 35, 24});
 	};
 
 	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override
 	{
-		target_.draw(line);
+		if (order < 8)
+			target_.draw(line);
+		else
+		{
+			sf::RectangleShape rect{{16, 16}};
+			rect.setFillColor({186, 40, 67, 120});
+			rect.setOrigin({8, 8});
+			rect.rotate(angle);
+			rect.setPosition(line.getPoint(0));
+			target_.draw(rect);
+		}
 	};
 
 	int order;
@@ -70,8 +81,17 @@ int main()
 	tree.emplace_back();
 
 	for (int i; i < 255; ++i)
-		for (int angle : {30, -15})
-			tree.emplace_back(&tree[i], angle);
+	{
+		if (i < 127)
+		{
+			tree.emplace_back(&tree[i], 30);
+			tree.emplace_back(&tree[i], -15);
+		}
+		else
+			tree.emplace_back(&tree[i], 45);
+	}
+
+	std::cout << tree.size();
 
 	while (true)
 	{
