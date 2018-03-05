@@ -54,10 +54,14 @@ struct Branch : public sf::Drawable
 			target_.draw(line);
 		else
 		{
-			sf::RectangleShape rect{{16, 16}};
+			sf::ConvexShape rect{4};
+			rect.setPoint(0, {0, 0});
+			rect.setPoint(1, {16, 0});
+			rect.setPoint(2, {22, 10});
+			rect.setPoint(3, {6, 10});
 			rect.setFillColor({186, 40, 67, 120});
-			rect.setOrigin({8, 8});
-			rect.rotate(angle);
+			rect.setOrigin({1, 1});
+			rect.rotate(angle - 180);
 			rect.setPosition(line.getPoint(0));
 			target_.draw(rect);
 		}
