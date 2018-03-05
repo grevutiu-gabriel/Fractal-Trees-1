@@ -13,13 +13,11 @@ Tree::Tree(sf::Vector2f position_)
 
 		std::array<int, 2> angles;
 		
-		do
-		{
-			for (int& rand_angle : angles)
-				rand_angle = std::uniform_int_distribution(-40, 40)(rng);
-		}
-		while (std::abs(angles[0] - angles[1]) < 40);
-				
+		for (int& rand_angle : angles)
+			rand_angle = std::uniform_int_distribution(20, 40)(rng);
+		
+		angles[0] *= -1;
+
 		if (_branches[i].order < 7)
 		{
 			_branches.emplace_back(i, angles[0], *this);     
