@@ -33,21 +33,19 @@ struct Branch : public sf::Drawable
 				.rotate(angle_ - 90 + parent->angle)
 				.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
 			, order < 8 ? map(static_cast<float>(order), {0, 8}, {10, 1}) : 12
-			, sf::Color::Black}
+			, {66, 35, 24}}
 		, angle{angle_ + parent->angle}
 	{
 		line.setRounded(true);
-		line.setColor(sf::Color{66, 35, 24});
 	};
 
 	Branch(sf::Vector2f position_)
 		: parent{nullptr}
 		, order{0}
-		, line{{position_}, {position_ - sf::Vector2f{0, 70}}, map(static_cast<float>(order), {0, 8}, {10, 1}), sf::Color::Black}
+		, line{{position_}, {position_ - sf::Vector2f{0, 70}}, map(static_cast<float>(order), {0, 8}, {10, 1}), {66, 35, 24}}
 		, angle{0}
 	{
 		line.setRounded(false);
-		line.setColor({66, 35, 24});
 	};
 
 	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override
