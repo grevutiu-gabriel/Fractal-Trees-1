@@ -15,11 +15,13 @@ int main()
 	background[0].color = background[1].color = {235, 129, 61};
 	background[2].color = background[3].color = {235, 63, 103};
 
-	std::vector<Tree> trees;
+	Tree tree{{500, 500}};
+	// std::vector<Tree> trees;
+	// trees.reserve(8);
 
-	for (float i{0}; i < 2; ++i)
-		for (float j{0}; j < 4; ++j)
-			trees.push_back({{450.f * j + 250.f, 400.f * (i + 1)}});
+	// for (float i{0}; i < 2; ++i)
+	// 	for (float j{0}; j < 4; ++j)
+	// 		trees.push_back({{450.f * j + 250.f, 400.f * (i + 1)}});
 
 	sf::Clock clock;
 	float lag{0.f};
@@ -38,7 +40,7 @@ int main()
 					return 0;
 			}
 
-			for (auto& tree : trees)
+			// for (auto& tree : trees)
 				for (auto& branch : tree)
 					branch.update(delta_time);
 
@@ -48,7 +50,7 @@ int main()
 
 		window.clear(sf::Color::White);
 		window.draw(background);
-		for (auto& tree : trees)
+		// for (auto& tree : trees)
 			for (const auto& branch : tree)
 				window.draw(branch);
 		window.display();

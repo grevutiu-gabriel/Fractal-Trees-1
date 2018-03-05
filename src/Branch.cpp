@@ -41,19 +41,19 @@ Branch::Branch(sf::Vector2f position_, const Tree& tree_)
 
 void Branch::update(float dt_)
 {
+	last_angle = angle;
+	const auto vec{line.getPoint(1) - line.getPoint(0)};
 	if (parent_index == -1)
 	{
-		auto vec{line.getPoint(1) - line.getPoint(0)};
-		last_angle = angle;
-		angle = std::sin(static_cast<float>(elapsed_frames) * dt_ * 3.14159f) * 2.f;
+		angle = std::sin(static_cast<float>(elapsed_frames) * dt_) * 2.f;
 		if (angle == 0)
 			elapsed_frames = 0;
-		std::cout << angle << '\n';
-		line.setPoint(1, line.getPoint(0) + sf::Transform{}.rotate(angle - last_angle).transformPoint(vec));
 	}
 	else
 	{
-		line.setPoint(0, tree[parent_index].line.getPoint(0));
+		angle += tree[parent_index].angle - tree[parent_index].last_angle;
+		line.setPoint(0, tree[parent_index].line.getPoint(1));
+		line.setPoint(1, line.getPoint(0) + sf::Transform{}.rotate(tree[parent_index].angle - tree[parent_index].last_angle).transformPoint(vec));
 	}
 
 	++elapsed_frames;
