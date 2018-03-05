@@ -40,10 +40,10 @@ struct Branch : public sf::Drawable
 		line.setColor(sf::Color{66, 35, 24});
 	};
 
-	Branch()
+	Branch(sf::Vector2f position_)
 		: parent{nullptr}
 		, order{0}
-		, line{{500, 500}, {500, 430}, map(static_cast<float>(order), {0, 8}, {10, 1}), sf::Color::Black}
+		, line{{position_}, {position_ - sf::Vector2f{0, 70}}, map(static_cast<float>(order), {0, 8}, {10, 1}), sf::Color::Black}
 		, angle{0}
 	{
 		line.setRounded(false);
@@ -72,36 +72,53 @@ struct Branch : public sf::Drawable
 	float width;
 };
 
+class Tree
+{
+public:
+	Tree(sf::Vector2f position_)
+	{
+		_branches.emplace_back(position_);
+
+		for (auto i{0u}; i < _branches.size(); ++i)
+		{
+			std::mt19937 rng{std::random_device{}()};
+
+			std::array<int, 2> angles;
+			
+			do
+			{
+				for (int& rand_angle : angles)
+					rand_angle = std::uniform_int_distribution(-40, 40)(rng);
+			}
+			while (std::abs(angles[0] - angles[1]) < 40);
+					
+			if (_branches[i].order < 7)
+			{
+				_branches.emplace_back(&_branches[i], angles[0]);     
+				if (std::uniform_int_distribution{0, 10}(rng) > _branches[i].order)
+					_branches.emplace_back(&_branches[i], angles[1]);     
+			}
+			else if (_branches[i].order == 7)
+				_branches.emplace_back(&_branches[i], 45);
+		}
+	}
+
+	auto begin() { return _branches.begin(); }
+	auto end() {return _branches.end(); }
+
+private:
+	std::vector<Branch> _branches;
+};
+
 int main()
 {
-	sf::RenderWindow window({900, 900}, "SFML", sf::Style::Default, sf::ContextSettings{0, 0, 4});
+	sf::RenderWindow window({1900, 1000}, "SFML", sf::Style::Default, sf::ContextSettings{0, 0, 4});
 
-	std::vector<Branch> tree;
-	tree.reserve(8);
-	tree.emplace_back();
+	std::vector<Tree> trees;
 
-	for (auto i{0u}; i < tree.size(); ++i)
-	{
-		std::mt19937 rng{std::random_device{}()};
-
-		std::array<int, 2> angles;
-		
-		do
-		{
-			for (int& rand_angle : angles)
-				rand_angle = std::uniform_int_distribution(-40, 40)(rng);
-		}
-		while (std::abs(angles[0] - angles[1]) < 40);
-				
-		if (tree[i].order < 7)
-		{
-			tree.emplace_back(&tree[i], angles[0]);     
-			if (std::uniform_int_distribution{0, 10}(rng) > tree[i].order)
-				tree.emplace_back(&tree[i], angles[1]);     
-		}
-		else if (tree[i].order == 7)
-			tree.emplace_back(&tree[i], 45);
-	}
+	for (float i{0}; i < 2; ++i)
+		for (float j{0}; j < 4; ++j)
+			trees.push_back({{450.f * j + 250.f, 400.f * (i + 1)}});
 
 	while (true)
 	{
@@ -113,8 +130,9 @@ int main()
 		}
 
 		window.clear(sf::Color::White);
-		for (const auto& branch : tree)
-			window.draw(branch);
+		for (auto& tree : trees)
+			for (const auto& branch : tree)
+				window.draw(branch);
 		window.display();
 	}
 }
