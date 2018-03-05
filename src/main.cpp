@@ -26,15 +26,15 @@ struct Branch : public sf::Drawable
 {
 	Branch(const Branch* parent_, float angle_)
 		: parent{parent_}
-		, order{parent_->order + 1}
-		, line{parent_->line.getPoint(1)
-			, parent_->line.getPoint(1)
+		, order{parent->order + 1}
+		, line{parent->line.getPoint(1)
+			, parent->line.getPoint(1)
 				+ sf::Transform{}
-				.rotate(angle_ - 90 + parent_->angle)
+				.rotate(angle_ - 90 + parent->angle)
 				.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
-			, order < 8 ? map(order, {0, 8}, {10, 1}) : 12
+			, order < 8 ? map(static_cast<float>(order), {0, 8}, {10, 1}) : 12
 			, sf::Color::Black}
-		, angle{angle_ + parent_->angle}
+		, angle{angle_ + parent->angle}
 	{
 		line.setRounded(true);
 		line.setColor(sf::Color{66, 35, 24});
@@ -43,7 +43,7 @@ struct Branch : public sf::Drawable
 	Branch()
 		: parent{nullptr}
 		, order{0}
-		, line{{500, 500}, {500, 450}, map(order, {0, 8}, {10, 1}), sf::Color::Black}
+		, line{{500, 500}, {500, 430}, map(static_cast<float>(order), {0, 8}, {10, 1}), sf::Color::Black}
 		, angle{0}
 	{
 		line.setRounded(false);
@@ -65,8 +65,8 @@ struct Branch : public sf::Drawable
 		}
 	};
 
-	int order;
 	const Branch* parent;
+	int order;
 	sw::Line line;
 	float angle;
 	float width;
@@ -80,25 +80,35 @@ int main()
 	tree.reserve(8);
 	tree.emplace_back();
 
-	for (int i; i < 255; ++i)
+	for (auto i{0u}; i < tree.size(); ++i)
 	{
-		if (i < 127)
+		std::mt19937 rng{std::random_device{}()};
+
+		std::array<int, 2> angles;
+		
+		do
 		{
-			tree.emplace_back(&tree[i], 30);
-			tree.emplace_back(&tree[i], -15);
+			for (int& rand_angle : angles)
+				rand_angle = std::uniform_int_distribution(-40, 40)(rng);
 		}
-		else
+		while (std::abs(angles[0] - angles[1]) < 40);
+				
+		if (tree[i].order < 7)
+		{
+			tree.emplace_back(&tree[i], angles[0]);     
+			if (std::uniform_int_distribution{0, 10}(rng) > tree[i].order)
+				tree.emplace_back(&tree[i], angles[1]);     
+		}
+		else if (tree[i].order == 7)
 			tree.emplace_back(&tree[i], 45);
 	}
-
-	std::cout << tree.size();
 
 	while (true)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+			if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 				return 0;
 		}
 

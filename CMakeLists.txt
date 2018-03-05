@@ -11,5 +11,5 @@ add_executable(main ${sources})
 set_target_properties(main PROPERTIES CXX_STANDARD 17)
 target_link_libraries(main ${SFML_LIBRARIES})
 
-# target_compile_options(main PUBLIC -Wall -Wextra -Wconversion -pedantic -Wno-unused-parameter -Wno-sign-conversion)
+target_compile_options(main PUBLIC -Wall -Wextra -Wconversion -pedantic -Wno-unused-parameter -Wno-sign-conversion)
 string(APPEND CMAKE_CXX_FLAGS_DEBUG " -O0")
