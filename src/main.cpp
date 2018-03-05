@@ -31,11 +31,12 @@ struct Branch : public sf::Drawable
 				+ sf::Transform{}
 				.rotate(angle_ - 90 + parent_->angle)
 				.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
-			, map(order, {0, 8}, {10, 1})
+			, order < 8 ? map(order, {0, 8}, {10, 1}) : 12
 			, sf::Color::Black}
 		, angle{angle_ + parent_->angle}
 	{
 		line.setRounded(true);
+		line.setColor(order < 8 ? sf::Color{66, 35, 24} : sf::Color{186, 40, 67, 100});
 	};
 
 	Branch()
@@ -45,6 +46,7 @@ struct Branch : public sf::Drawable
 		, angle{0}
 	{
 		line.setRounded(true);
+		line.setColor({66, 35, 24});
 	};
 
 	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override
@@ -67,8 +69,8 @@ int main()
 	tree.reserve(8);
 	tree.emplace_back();
 
-	for (int i; i < 254; ++i)
-		for (int angle : {20, -20})
+	for (int i; i < 255; ++i)
+		for (int angle : {30, -15})
 			tree.emplace_back(&tree[i], angle);
 
 	while (true)
