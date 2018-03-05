@@ -32,8 +32,8 @@ struct Branch : public sf::Drawable
 				+ sf::Transform{}
 				.rotate(angle_ - 90 + parent->angle)
 				.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
-			, order < 8 ? map(static_cast<float>(order), {0, 8}, {10, 1}) : 12
-			, {66, 35, 24}}
+			, map(static_cast<float>(order), {0, 8}, {10, 1})
+			, sf::Color{130, 219, 255}}
 		, angle{angle_ + parent->angle}
 	{
 		line.setRounded(true);
@@ -42,7 +42,7 @@ struct Branch : public sf::Drawable
 	Branch(sf::Vector2f position_)
 		: parent{nullptr}
 		, order{0}
-		, line{{position_}, {position_ - sf::Vector2f{0, 70}}, map(static_cast<float>(order), {0, 8}, {10, 1}), {66, 35, 24}}
+		, line{{position_}, {position_}, map(static_cast<float>(order), {0, 8}, {10, 1}), sf::Color{130, 219, 255}}
 		, angle{0}
 	{
 		line.setRounded(false);
@@ -50,17 +50,7 @@ struct Branch : public sf::Drawable
 
 	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override
 	{
-		if (order < 8)
-			target_.draw(line);
-		else
-		{
-			sf::RectangleShape rect{{16, 16}};
-			rect.setFillColor({186, 40, 67, 120});
-			rect.setOrigin({8, 8});
-			rect.rotate(angle);
-			rect.setPosition(line.getPoint(0));
-			target_.draw(rect);
-		}
+		target_.draw(line);
 	};
 
 	const Branch* parent;
@@ -86,14 +76,14 @@ public:
 			do
 			{
 				for (int& rand_angle : angles)
-					rand_angle = std::uniform_int_distribution(-40, 40)(rng);
+					rand_angle = std::uniform_int_distribution(-5 * (_branches[i].order + 1), 5 * (_branches[i].order + 1))(rng);
 			}
-			while (std::abs(angles[0] - angles[1]) < 40);
+			while (std::abs(angles[0] - angles[1]) < 5. * (_branches[i].order + 1));
 					
 			if (_branches[i].order < 7)
 			{
 				_branches.emplace_back(&_branches[i], angles[0]);     
-				if (std::uniform_int_distribution{0, 10}(rng) > _branches[i].order)
+				if (std::uniform_int_distribution{0, 10}(rng) < _branches[i].order)
 					_branches.emplace_back(&_branches[i], angles[1]);     
 			}
 			else if (_branches[i].order == 7)
@@ -111,6 +101,7 @@ private:
 int main()
 {
 	sf::RenderWindow window({1900, 1000}, "SFML", sf::Style::Default, sf::ContextSettings{0, 0, 4});
+	window.setFramerateLimit(24);
 
 	std::vector<Tree> trees;
 
@@ -128,9 +119,8 @@ int main()
 		}
 
 		window.clear(sf::Color::White);
-		for (auto& tree : trees)
-			for (const auto& branch : tree)
-				window.draw(branch);
+		for (auto branch : Tree{{500, 500}})
+			window.draw(branch);
 		window.display();
 	}
 }
