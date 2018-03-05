@@ -20,11 +20,13 @@ Branch::Branch(int parent_index_, float angle_, const Tree& tree_)
 	, angle{angle_ + tree[parent_index].angle}
 	, last_angle{0}
 	, elapsed_frames{0}
+	, angle_multiplier{1}
 {
 	line.setRounded(true);
 	std::mt19937 rng{std::random_device{}()};
 	std::uniform_int_distribution<int> rand_length_mult{50, 150};
 	line.setPoint(1, line.getPoint(0) + (line.getPoint(1) - line.getPoint(0)) * (static_cast<float>(rand_length_mult(rng)) / 100));
+	setRandomAngleMultiplier();
 }
 
 Branch::Branch(sf::Vector2f position_, const Tree& tree_)
@@ -35,25 +37,26 @@ Branch::Branch(sf::Vector2f position_, const Tree& tree_)
 	, angle{0}
 	, last_angle{0}
 	, elapsed_frames{0}
+	, angle_multiplier{1}
 {
-	line.setRounded(false);
+	setRandomAngleMultiplier();
 }
 
 void Branch::update(float dt_)
 {
 	last_angle = angle;
+	
 	const auto vec{line.getPoint(1) - line.getPoint(0)};
+
 	if (parent_index == -1)
-	{
-		angle = std::sin(static_cast<float>(elapsed_frames) * dt_) * 2.f;
-		if (angle == 0)
-			elapsed_frames = 0;
-	}
+		angle = std::sin(static_cast<float>(elapsed_frames) * dt_) * 2.f * angle_multiplier;
 	else
 	{
-		angle += tree[parent_index].angle - tree[parent_index].last_angle;
+		float angle_change{(tree[parent_index].angle - tree[parent_index].last_angle) / static_cast<float>(order) * 2};
+
+		angle += angle_change;
 		line.setPoint(0, tree[parent_index].line.getPoint(1));
-		line.setPoint(1, line.getPoint(0) + sf::Transform{}.rotate(tree[parent_index].angle - tree[parent_index].last_angle).transformPoint(vec));
+		line.setPoint(1, line.getPoint(0) + sf::Transform{}.rotate(angle_change).transformPoint(vec));
 	}
 
 	++elapsed_frames;
@@ -76,4 +79,11 @@ void Branch::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
 		rect.setPosition(line.getPoint(0));
 		target_.draw(rect);
 	}
+}
+
+void Branch::setRandomAngleMultiplier()
+{
+	std::mt19937 rng{std::random_device{}()};
+	std::uniform_int_distribution<int> rand_angle_mult{66, 150};
+	angle_multiplier = static_cast<float>(rand_angle_mult(rng)) / 100.f;
 }

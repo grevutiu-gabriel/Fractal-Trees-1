@@ -8,10 +8,16 @@ std::ostream& operator<<(std::ostream& os_, const sf::Vector2f& vec_)
 	return os_;
 }
 
+
 struct FloatPair
 {
 	float first, second;
 };
+
+bool inBounds(float value_, FloatPair range_)
+{
+	return value_ >= range_.first && value_ <= range_.second; 
+}
 
 float map(float value_, FloatPair original_range_, FloatPair new_range_)
 {
