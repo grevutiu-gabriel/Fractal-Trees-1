@@ -2,7 +2,7 @@
 
 ![Animation of result](demo.gif)
 
-Randomly generated fractal trees visualized with SFML in C++. Watch out: `Tree` move constructor is _O(n)_.
+Randomly generated fractal trees visualized with SFML in C++. Watch out: Using `Tree`'s move constructor may lead to undefined behavior.
 
 ## Dependencies
 * [SFML](https://sfml-dev.org)
