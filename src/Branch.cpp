@@ -24,8 +24,8 @@ Branch::Branch(int parent_index_, float angle_, const Tree& tree_)
 {
 	line.setRounded(true);
 	std::mt19937 rng{std::random_device{}()};
-	std::uniform_int_distribution<int> rand_length_mult{50, 150};
-	line.setPoint(1, line.getPoint(0) + (line.getPoint(1) - line.getPoint(0)) * (static_cast<float>(rand_length_mult(rng)) / 100));
+	int rand_length_percent{std::uniform_int_distribution<int>{66, 150}(rng)};
+	line.setPoint(1, line.getPoint(0) + (line.getPoint(1) - line.getPoint(0)) * (static_cast<float>(rand_length_percent) / 100));
 	setRandomAngleMultiplier();
 }
 
@@ -42,8 +42,8 @@ Branch::Branch(sf::Vector2f position_, const Tree& tree_)
 	setRandomAngleMultiplier();
 
 	std::mt19937 rng{std::random_device{}()};
-	std::uniform_int_distribution<int> rand_start_elapsed_headstart{0, 144};
-	elapsed_frames = rand_start_elapsed_headstart(rng);
+	int rand_start_elapsed_headstart{std::uniform_int_distribution<int>{0, 144}(rng)};
+	elapsed_frames = rand_start_elapsed_headstart;
 }
 
 void Branch::update(float dt_)
@@ -88,6 +88,6 @@ void Branch::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
 void Branch::setRandomAngleMultiplier()
 {
 	std::mt19937 rng{std::random_device{}()};
-	std::uniform_int_distribution<int> rand_angle_mult{66, 150};
-	angle_multiplier = static_cast<float>(rand_angle_mult(rng)) / 100.f;
+	int rand_angle_percent{std::uniform_int_distribution<int>{50, 150}(rng)};
+	angle_multiplier = static_cast<float>(rand_angle_percent) / 100.f;
 }
