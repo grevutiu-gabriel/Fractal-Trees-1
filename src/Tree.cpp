@@ -37,9 +37,9 @@
 
 Tree::Tree(sf::Vector2f position_)
 {
-	_branches.emplace_back(position_, *this);
+	branches.emplace_back(position_, *this);
 
-	for (auto i{0u}; i < _branches.size(); ++i)
+	for (auto i{0u}; i < branches.size(); ++i)
 	{
 		std::mt19937 rng{std::random_device{}()};
 
@@ -50,21 +50,21 @@ Tree::Tree(sf::Vector2f position_)
 		
 		angles[0] *= -1;
 
-		if (_branches[i].order < 7)
+		if (branches[i].getOrder() < 7)
 		{
 			int rand{std::uniform_int_distribution{1, 11}(rng)};
 
-			if (rand  > _branches[i].order)
+			if (rand  > branches[i].getOrder())
 			{
-				_branches.emplace_back(i, _branches.size() - 1, angles[0], *this);     
-				_branches.emplace_back(i, _branches.size() - 1, angles[1], *this);     
+				branches.emplace_back(i, branches.size() - 1, angles[0], *this);     
+				branches.emplace_back(i, branches.size() - 1, angles[1], *this);     
 			}
 			else if (std::uniform_int_distribution{0, 1}(rng))
-				_branches.emplace_back(i, _branches.size() - 1, angles[0], *this);     
+				branches.emplace_back(i, branches.size() - 1, angles[0], *this);     
 			else
-				_branches.emplace_back(i, _branches.size() - 1, angles[1], *this);     
+				branches.emplace_back(i, branches.size() - 1, angles[1], *this);     
 		}
-		else if (_branches[i].order == 7)
-			_branches.emplace_back(i, _branches.size() - 1, 45, *this);
+		else if (branches[i].getOrder() == 7)
+			branches.emplace_back(i, branches.size() - 1, 45, *this);
 	}
 }

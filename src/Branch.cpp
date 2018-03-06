@@ -44,8 +44,8 @@ Branch::Branch(int parent_index_, int current_index_, float angle_, Tree& tree_)
 	, child_index{-1}
 	, tree{tree_}
 	, order{tree[parent_index].order + 1}
-	, line{tree[parent_index].line.getPoint(1)
-		, tree[parent_index].line.getPoint(1)
+	, line{tree[parent_index].getEnd()
+		, tree[parent_index].getEnd()
 			+ sf::Transform{}
 			.rotate(angle_ - 90 + tree[parent_index].angle)
 			.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
@@ -60,7 +60,7 @@ Branch::Branch(int parent_index_, int current_index_, float angle_, Tree& tree_)
 	line.setRounded(true);
 	
 	int rand_length_percent{std::uniform_int_distribution<int>{66, 150}(rng)};
-	line.setPoint(1, line.getPoint(0) + (line.getPoint(1) - line.getPoint(0)) * (static_cast<float>(rand_length_percent) / 100));
+	line.setPoint(1, getStart() + (getEnd() - getStart()) * (static_cast<float>(rand_length_percent) / 100));
 	setRandomAngleMultiplier();
 
 	tree_[parent_index].child_index = current_index_;
@@ -89,7 +89,7 @@ void Branch::update(float dt_)
 {
 	last_angle = angle;
 	
-	const auto vec{line.getPoint(1) - line.getPoint(0)};
+	const auto vec{getEnd() - getStart()};
 
 	if (parent_index == -1)
 		angle = std::sin(static_cast<float>(elapsed_frames) * dt_) * 2.f * angle_multiplier;
@@ -98,8 +98,8 @@ void Branch::update(float dt_)
 		float angle_change{(tree[parent_index].angle - tree[parent_index].last_angle) / static_cast<float>(order) * 2};
 
 		angle += angle_change;
-		line.setPoint(0, tree[parent_index].line.getPoint(1));
-		line.setPoint(1, line.getPoint(0) + sf::Transform{}.rotate(angle_change).transformPoint(vec));
+		line.setPoint(0, tree[parent_index].getEnd());
+		line.setPoint(1, getStart() + sf::Transform{}.rotate(angle_change).transformPoint(vec));
 	}
 
 	++elapsed_frames;

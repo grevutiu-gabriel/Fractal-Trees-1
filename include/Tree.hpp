@@ -39,11 +39,11 @@ class Tree
 public:
 	Tree(sf::Vector2f position_);
 
-	auto begin() { return _branches.begin(); }
-	auto end() {return _branches.end(); }
-	auto& operator[](int index_) { return _branches[index_]; }
-	const auto& operator[](int index_) const { return _branches[index_]; }
+	auto begin() { return branches.begin(); }
+	auto end() {return branches.end(); }
+	auto& operator[](int index_) { return branches[index_]; }
+	const auto& operator[](int index_) const { return branches[index_]; }
 
 private:
-	std::vector<Branch> _branches;
+	std::vector<Branch> branches;
 };

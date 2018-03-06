@@ -38,13 +38,18 @@
 
 class Tree;
 
-struct Branch : public sf::Drawable
+class Branch : public sf::Drawable
 {
+public:
 	Branch(int parent_index_, int current_index_, float angle_, Tree& tree_);
 	Branch(sf::Vector2f position_, const Tree& tree_);
 	void update(float dt_);
-	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override;
+	sf::Vector2f getStart() const { return line.getPoint(0); }
+	sf::Vector2f getEnd() const { return line.getPoint(1); }
+	int getOrder() const { return order; }
 
+private:
+	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override;
 	void setRandomAngleMultiplier();
 
 	int parent_index

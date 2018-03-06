@@ -53,7 +53,7 @@ void Leaf::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
 	parallelogram.setFillColor({134, 255, 74, 80});
 	parallelogram.setOrigin({1, 1});
 	parallelogram.rotate(angle);
-	parallelogram.setPosition(branch.line.getPoint(1));
+	parallelogram.setPosition(branch.getEnd());
 
 	target_.draw(parallelogram);
 }
