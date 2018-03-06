@@ -15,5 +15,6 @@ The demo can be built with [CMake](https://cmake.org)
 mkdir build
 cd build
 cmake ..
+make
 ./demo
 ```
