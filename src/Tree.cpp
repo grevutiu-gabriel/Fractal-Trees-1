@@ -52,14 +52,14 @@ Tree::Tree(sf::Vector2f position_)
 
 		if (_branches[i].order < 7)
 		{
-			int rand{std::uniform_int_distribution{0, 10}(rng)};
+			int rand{std::uniform_int_distribution{1, 11}(rng)};
 
 			if (rand  > _branches[i].order)
 			{
 				_branches.emplace_back(i, _branches.size() - 1, angles[0], *this);     
 				_branches.emplace_back(i, _branches.size() - 1, angles[1], *this);     
 			}
-			else if (static_cast<float>(rand)  > static_cast<float>(_branches[i].order) * .5f)
+			else if (std::uniform_int_distribution{0, 1}(rng))
 				_branches.emplace_back(i, _branches.size() - 1, angles[0], *this);     
 			else
 				_branches.emplace_back(i, _branches.size() - 1, angles[1], *this);     
