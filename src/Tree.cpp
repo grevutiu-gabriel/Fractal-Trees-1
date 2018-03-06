@@ -20,8 +20,16 @@ Tree::Tree(sf::Vector2f position_)
 
 		if (_branches[i].order < 7)
 		{
-			_branches.emplace_back(i, angles[0], *this);     
-			if (std::uniform_int_distribution{0, 10}(rng) > _branches[i].order)
+			int rnd{std::uniform_int_distribution{0, 10}(rng)};
+
+			if (rnd  > _branches[i].order)
+			{
+				_branches.emplace_back(i, angles[0], *this);     
+				_branches.emplace_back(i, angles[1], *this);     
+			}
+			else if (static_cast<float>(rnd)  > static_cast<float>(_branches[i].order) * .5f)
+				_branches.emplace_back(i, angles[0], *this);     
+			else
 				_branches.emplace_back(i, angles[1], *this);     
 		}
 		else if (_branches[i].order == 7)
