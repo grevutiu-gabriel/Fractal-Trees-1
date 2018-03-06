@@ -19,7 +19,7 @@ Branch::Branch(int parent_index_, float angle_, const Tree& tree_)
 		, {66, 35, 24}}
 	, angle{angle_ + tree[parent_index].angle}
 	, last_angle{0}
-	, elapsed_frames{0}
+	, elapsed_frames{tree[parent_index].elapsed_frames}
 	, angle_multiplier{1}
 {
 	line.setRounded(true);
@@ -40,6 +40,10 @@ Branch::Branch(sf::Vector2f position_, const Tree& tree_)
 	, angle_multiplier{1}
 {
 	setRandomAngleMultiplier();
+
+	std::mt19937 rng{std::random_device{}()};
+	std::uniform_int_distribution<int> rand_start_elapsed_headstart{0, 144};
+	elapsed_frames = rand_start_elapsed_headstart(rng);
 }
 
 void Branch::update(float dt_)
