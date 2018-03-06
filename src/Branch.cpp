@@ -37,6 +37,7 @@
 #include <random>
 #include <iostream>
 #include <SFML/Graphics/ConvexShape.hpp>
+#include <Leaf.hpp>
 
 Branch::Branch(int parent_index_, float angle_, const Tree& tree_)
 	: parent_index{parent_index_}
@@ -47,15 +48,16 @@ Branch::Branch(int parent_index_, float angle_, const Tree& tree_)
 			+ sf::Transform{}
 			.rotate(angle_ - 90 + tree[parent_index].angle)
 			.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
-		, order < 8 ? map(static_cast<float>(order), {0, 8}, {10, 1}) : 12
+		, map(static_cast<float>(order), {0, 8}, {10, 1})
 		, {66, 35, 24}}
 	, angle{angle_ + tree[parent_index].angle}
 	, last_angle{0}
 	, elapsed_frames{tree[parent_index].elapsed_frames}
 	, angle_multiplier{1}
+	, rng{tree[parent_index].rng}
 {
 	line.setRounded(true);
-	std::mt19937 rng{std::random_device{}()};
+	
 	int rand_length_percent{std::uniform_int_distribution<int>{66, 150}(rng)};
 	line.setPoint(1, line.getPoint(0) + (line.getPoint(1) - line.getPoint(0)) * (static_cast<float>(rand_length_percent) / 100));
 	setRandomAngleMultiplier();
@@ -70,6 +72,7 @@ Branch::Branch(sf::Vector2f position_, const Tree& tree_)
 	, last_angle{0}
 	, elapsed_frames{0}
 	, angle_multiplier{1}
+	, rng{std::random_device{}()}
 {
 	setRandomAngleMultiplier();
 
@@ -100,21 +103,17 @@ void Branch::update(float dt_)
 
 void Branch::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
 {
-	if (order < 8)
-		target_.draw(line);
-	else
+	target_.draw(line);
+
+	if (order > 2)
 	{
-		sf::ConvexShape rect{4};
-		rect.setPoint(0, {0, 0});
-		rect.setPoint(1, {16, 0});
-		rect.setPoint(2, {22, 10});
-		rect.setPoint(3, {6, 10});
-		rect.setFillColor({134, 255, 74, 80});
-		rect.setOrigin({1, 1});
-		rect.rotate(angle - 180);
-		rect.setPosition(line.getPoint(0));
-		target_.draw(rect);
+		Leaf leaf1{*this, angle - 80.f, rng};
+		Leaf leaf2{*this, angle - 160.f, rng};
+
+		target_.draw(leaf1);
+		target_.draw(leaf2);
 	}
+
 }
 
 void Branch::setRandomAngleMultiplier()

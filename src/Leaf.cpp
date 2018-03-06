@@ -30,30 +30,30 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include <Leaf.hpp>
+#include <Tree.hpp>
+#include <SFML/Graphics/ConvexShape.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
-#include <SelbaWard/Line.hpp>
-#include <SFML/Graphics/Drawable.hpp>
-#include <random>
-
-class Tree;
-
-struct Branch : public sf::Drawable
+Leaf::Leaf(const Branch& branch_, float angle_, std::mt19937 rng_)
+	: branch{branch_}
+	, angle{angle_}
+	, rng{rng_}
 {
-	Branch(int parent_index_, float angle_, const Tree& tree_);
-	Branch(sf::Vector2f position_, const Tree& tree_);
-	void update(float dt_);
-	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override;
+}
 
-	void setRandomAngleMultiplier();
 
-	int parent_index;
-	const Tree& tree;
-	int order;
-	sw::Line line;
-	float angle, last_angle;
-	float width;
-	int elapsed_frames;
-	float angle_multiplier;
-	std::mt19937 rng;
-};
+void Leaf::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
+{
+	sf::ConvexShape parallelogram{4};
+	parallelogram.setPoint(0, {0, 0});
+	parallelogram.setPoint(1, {16, 0});
+	parallelogram.setPoint(2, {22, 10});
+	parallelogram.setPoint(3, {6, 10});
+	parallelogram.setFillColor({134, 255, 74, 80});
+	parallelogram.setOrigin({1, 1});
+	parallelogram.rotate(angle);
+	parallelogram.setPosition(branch.line.getPoint(1));
+
+	target_.draw(parallelogram);
+}
