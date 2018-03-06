@@ -39,8 +39,9 @@
 #include <SFML/Graphics/ConvexShape.hpp>
 #include <Leaf.hpp>
 
-Branch::Branch(int parent_index_, float angle_, const Tree& tree_)
+Branch::Branch(int parent_index_, int current_index_, float angle_, Tree& tree_)
 	: parent_index{parent_index_}
+	, child_index{-1}
 	, tree{tree_}
 	, order{tree[parent_index].order + 1}
 	, line{tree[parent_index].line.getPoint(1)
@@ -61,10 +62,13 @@ Branch::Branch(int parent_index_, float angle_, const Tree& tree_)
 	int rand_length_percent{std::uniform_int_distribution<int>{66, 150}(rng)};
 	line.setPoint(1, line.getPoint(0) + (line.getPoint(1) - line.getPoint(0)) * (static_cast<float>(rand_length_percent) / 100));
 	setRandomAngleMultiplier();
+
+	tree_[parent_index].child_index = current_index_;
 }
 
 Branch::Branch(sf::Vector2f position_, const Tree& tree_)
 	: parent_index{-1}
+	, child_index{-1}
 	, tree{tree_}
 	, order{0}
 	, line{{position_}, {position_ - sf::Vector2f{0, 70}}, map(static_cast<float>(order), {0, 8}, {10, 1}), {66, 35, 24}}
@@ -107,8 +111,24 @@ void Branch::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
 
 	if (order > 2)
 	{
-		Leaf leaf1{*this, angle - 80.f, rng};
-		Leaf leaf2{*this, angle - 160.f, rng};
+		float angle1{}
+			, angle2{angle};
+
+		if (child_index != -1)
+		{
+			angle1 = angle2 = tree[child_index].angle;
+			angle1 -= 70;
+			angle2 -= 160;
+		}
+		else
+		{
+			angle1 = angle2 = angle;
+			angle1 -= 70;
+			angle2 -= 160;
+		}
+
+		Leaf leaf1{*this, angle1, rng}
+			, leaf2{*this, angle2, rng};
 
 		target_.draw(leaf1);
 		target_.draw(leaf2);

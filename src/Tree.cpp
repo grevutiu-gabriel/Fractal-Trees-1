@@ -56,15 +56,15 @@ Tree::Tree(sf::Vector2f position_)
 
 			if (rand  > _branches[i].order)
 			{
-				_branches.emplace_back(i, angles[0], *this);     
-				_branches.emplace_back(i, angles[1], *this);     
+				_branches.emplace_back(i, _branches.size() - 1, angles[0], *this);     
+				_branches.emplace_back(i, _branches.size() - 1, angles[1], *this);     
 			}
 			else if (static_cast<float>(rand)  > static_cast<float>(_branches[i].order) * .5f)
-				_branches.emplace_back(i, angles[0], *this);     
+				_branches.emplace_back(i, _branches.size() - 1, angles[0], *this);     
 			else
-				_branches.emplace_back(i, angles[1], *this);     
+				_branches.emplace_back(i, _branches.size() - 1, angles[1], *this);     
 		}
 		else if (_branches[i].order == 7)
-			_branches.emplace_back(i, 45, *this);
+			_branches.emplace_back(i, _branches.size() - 1, 45, *this);
 	}
 }

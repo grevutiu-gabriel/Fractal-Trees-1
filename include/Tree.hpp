@@ -41,7 +41,8 @@ public:
 
 	auto begin() { return _branches.begin(); }
 	auto end() {return _branches.end(); }
-	auto operator[](int index_) const { return _branches[index_]; }
+	auto& operator[](int index_) { return _branches[index_]; }
+	const auto& operator[](int index_) const { return _branches[index_]; }
 
 private:
 	std::vector<Branch> _branches;
