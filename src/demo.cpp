@@ -40,8 +40,7 @@ int main()
 			}
 
 			for (auto& tree : trees)
-				for (auto& branch : tree)
-					branch.update(delta_time);
+				tree.update(delta_time);
 
 			lag -= delta_time;	
 		}
@@ -50,8 +49,7 @@ int main()
 		window.clear(sf::Color::White);
 		window.draw(background);
 		for (auto& tree : trees)
-			for (const auto& branch : tree)
-				window.draw(branch);
+			window.draw(tree);
 		window.display();
 	}
 }

@@ -37,17 +37,20 @@
 namespace frt
 {
 
-class Tree
+class Tree : public sf::Drawable
 {
+friend class _priv::Branch;
+
 public:
 	Tree(sf::Vector2f position_);
 
-	auto begin() { return branches.begin(); }
-	auto end() {return branches.end(); }
-	auto& operator[](int index_) { return branches[index_]; }
 	const auto& operator[](int index_) const { return branches[index_]; }
+	void update(float dt_);
 
 private:
+	void draw(sf::RenderTarget& target_, sf::RenderStates states_) const override;
+	
+	auto& operator[](int index_) { return branches[index_]; }
 	std::vector<_priv::Branch> branches;
 };
 

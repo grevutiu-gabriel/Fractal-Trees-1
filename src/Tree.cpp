@@ -72,4 +72,16 @@ Tree::Tree(sf::Vector2f position_)
 	}
 }
 
+void Tree::update(float dt_)
+{
+	for (auto branch : branches)
+		branch.update(dt_);
+}
+
+void Tree::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
+{
+	for (auto branch : branches)
+		target_.draw(branch);
+}
+
 } // frt
