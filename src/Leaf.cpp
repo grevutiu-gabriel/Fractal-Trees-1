@@ -38,6 +38,9 @@
 namespace frt
 {
 
+namespace _priv
+{
+
 Leaf::Leaf(const Branch& branch_, float angle_, std::mt19937 rng_)
 	: branch{branch_}
 	, angle{angle_}
@@ -60,5 +63,7 @@ void Leaf::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
 
 	target_.draw(parallelogram);
 }
+
+} // _priv
 
 } // frt

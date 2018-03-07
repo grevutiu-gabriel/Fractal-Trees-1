@@ -42,6 +42,9 @@
 namespace frt
 {
 
+namespace _priv
+{
+
 Branch::Branch(int parent_index_, int current_index_, float angle_, Tree& tree_)
 	: parent_index{parent_index_}
 	, child_index{-1}
@@ -145,5 +148,7 @@ void Branch::setRandomAngleMultiplier()
 	int rand_angle_percent{std::uniform_int_distribution<int>{50, 150}(rng)};
 	angle_multiplier = static_cast<float>(rand_angle_percent) / 100.f;
 }
+
+} // _priv
 
 } // frt

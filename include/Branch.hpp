@@ -41,6 +41,9 @@ namespace frt
 
 class Tree;
 
+namespace _priv
+{
+
 class Branch : public sf::Drawable
 {
 public:
@@ -67,5 +70,7 @@ private:
 	float angle_multiplier;
 	std::mt19937 rng;
 };
+
+} // _priv
 
 } // frt

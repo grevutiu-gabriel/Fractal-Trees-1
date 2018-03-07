@@ -48,7 +48,7 @@ public:
 	const auto& operator[](int index_) const { return branches[index_]; }
 
 private:
-	std::vector<Branch> branches;
+	std::vector<_priv::Branch> branches;
 };
 
 } // frt

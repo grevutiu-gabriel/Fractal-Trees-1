@@ -38,6 +38,9 @@
 namespace frt
 {
 
+namespace _priv
+{
+
 class Branch;
 
 class Leaf : public sf::Drawable
@@ -52,5 +55,7 @@ private:
 	float angle;
 	std::mt19937 rng;
 };
+
+} // _priv
 
 } // frt
