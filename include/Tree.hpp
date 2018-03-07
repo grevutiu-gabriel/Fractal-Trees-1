@@ -34,6 +34,9 @@
 
 #include <Branch.hpp>
 
+namespace frt
+{
+
 class Tree
 {
 public:
@@ -47,3 +50,5 @@ public:
 private:
 	std::vector<Branch> branches;
 };
+
+} // frt

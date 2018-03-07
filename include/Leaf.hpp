@@ -35,6 +35,9 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <random>
 
+namespace frt
+{
+
 class Branch;
 
 class Leaf : public sf::Drawable
@@ -49,3 +52,5 @@ private:
 	float angle;
 	std::mt19937 rng;
 };
+
+} // frt

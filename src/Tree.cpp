@@ -35,6 +35,9 @@
 #include <random>
 #include <array>
 
+namespace frt
+{
+
 Tree::Tree(sf::Vector2f position_)
 {
 	branches.emplace_back(position_, *this);
@@ -68,3 +71,5 @@ Tree::Tree(sf::Vector2f position_)
 			branches.emplace_back(i, branches.size() - 1, 45, *this);
 	}
 }
+
+} // frt

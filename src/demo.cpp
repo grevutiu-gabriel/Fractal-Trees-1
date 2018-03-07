@@ -15,7 +15,7 @@ int main()
 	background[0].color = background[1].color = {235, 129, 61};
 	background[2].color = background[3].color = {235, 63, 103};
 
-	std::vector<Tree> trees;
+	std::vector<frt::Tree> trees;
 	trees.reserve(8);
 
 	for (float i{0}; i < 2; ++i)

@@ -36,6 +36,9 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <random>
 
+namespace frt
+{
+
 class Tree;
 
 class Branch : public sf::Drawable
@@ -64,3 +67,5 @@ private:
 	float angle_multiplier;
 	std::mt19937 rng;
 };
+
+} // frt

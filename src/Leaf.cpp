@@ -35,6 +35,9 @@
 #include <SFML/Graphics/ConvexShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+namespace frt
+{
+
 Leaf::Leaf(const Branch& branch_, float angle_, std::mt19937 rng_)
 	: branch{branch_}
 	, angle{angle_}
@@ -57,3 +60,5 @@ void Leaf::draw(sf::RenderTarget& target_, sf::RenderStates states_) const
 
 	target_.draw(parallelogram);
 }
+
+} // frt

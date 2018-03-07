@@ -39,6 +39,9 @@
 #include <SFML/Graphics/ConvexShape.hpp>
 #include <Leaf.hpp>
 
+namespace frt
+{
+
 Branch::Branch(int parent_index_, int current_index_, float angle_, Tree& tree_)
 	: parent_index{parent_index_}
 	, child_index{-1}
@@ -49,7 +52,7 @@ Branch::Branch(int parent_index_, int current_index_, float angle_, Tree& tree_)
 			+ sf::Transform{}
 			.rotate(angle_ - 90 + tree[parent_index].angle)
 			.transformPoint({50 * static_cast<float>(std::pow(.9, order)), 0})
-		, map(static_cast<float>(order), {0, 8}, {10, 1})
+		, _util::map(static_cast<float>(order), {0, 8}, {10, 1})
 		, {66, 35, 24}}
 	, angle{angle_ + tree[parent_index].angle}
 	, last_angle{0}
@@ -71,7 +74,7 @@ Branch::Branch(sf::Vector2f position_, const Tree& tree_)
 	, child_index{-1}
 	, tree{tree_}
 	, order{0}
-	, line{{position_}, {position_ - sf::Vector2f{0, 70}}, map(static_cast<float>(order), {0, 8}, {10, 1}), {66, 35, 24}}
+	, line{{position_}, {position_ - sf::Vector2f{0, 70}}, _util::map(static_cast<float>(order), {0, 8}, {10, 1}), {66, 35, 24}}
 	, angle{0}
 	, last_angle{0}
 	, elapsed_frames{0}
@@ -142,3 +145,5 @@ void Branch::setRandomAngleMultiplier()
 	int rand_angle_percent{std::uniform_int_distribution<int>{50, 150}(rng)};
 	angle_multiplier = static_cast<float>(rand_angle_percent) / 100.f;
 }
+
+} // frt
