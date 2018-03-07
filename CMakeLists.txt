@@ -12,4 +12,3 @@ set_target_properties(demo PROPERTIES CXX_STANDARD 17)
 target_link_libraries(demo ${SFML_LIBRARIES})
 
 target_compile_options(demo PUBLIC -Wall -Wextra -Wconversion -pedantic -Wno-unused-parameter -Wno-sign-conversion)
-string(APPEND CMAKE_CXX_FLAGS_DEBUG " -O0")
